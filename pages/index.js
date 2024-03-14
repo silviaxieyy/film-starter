@@ -1,7 +1,10 @@
-import FilmLibrary from './components/FilmLibrary';
+import FilmLibrary from '../components/FilmLibrary';
 
 export default function Home() {
   return (
-    <FilmLibrary />
+    <>
+      <h1>hello</h1>
+      <FilmLibrary />
+    </>
   );
 }

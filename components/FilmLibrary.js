@@ -3,7 +3,7 @@ import FilmDetail from "./FilmDetail";
 import './FilmLibrary.css';
 import FilmRow from "./FilmRow";
 import './FilmRow.css'
-import TMDB from "./TMDB";
+import TMDB from "./TMDB"
 
 function FilmLibrary() {
   const [selectedFilm, setSelectedFilm] = useState(null);
