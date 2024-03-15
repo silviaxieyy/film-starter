@@ -3,13 +3,15 @@ import FilmDetail from "./FilmDetail";
 import './FilmLibrary.css';
 import FilmRow from "./FilmRow";
 import './FilmRow.css'
-import TMDB from "./TMDB";
+import TMDB, { TMDB_API_KEY } from "./TMDB";
 
 function FilmLibrary() {
   const [selectedFilm, setSelectedFilm] = useState(null);
   const [faveFilms, setFaveFilms] = useState([]);
 
   const handleReadMoreDetail = (index) => {
+    const url = `https://api.themoviedb.org/3/movie/{movie_id}`
+    
     setSelectedFilm(TMDB.films[index]);
   }
   

@@ -1,3 +1,5 @@
+export const TMDB_API_KEY = process.env.NEXT_PUBLIC_REACT_APP_TMDB_API_KEY
+
 const TMDB = {
   films: [
     {
