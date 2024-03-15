@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import FilmDetail from "./FilmDetail";
+import FilmDetailEmpty from "./FilmDetailEmpty";
 import './FilmLibrary.css';
 import FilmRow from "./FilmRow";
 import './FilmRow.css'
@@ -54,7 +55,8 @@ function FilmLibrary() {
 
       <div className="film-details">
         <h1 className="section-title">DETAILS</h1>
-        {selectedFilm && 
+        {selectedFilm === null ?
+          <FilmDetailEmpty /> :
             <FilmDetail 
               title={selectedFilm.title} 
               backdrop_path={selectedFilm.backdrop_path}
