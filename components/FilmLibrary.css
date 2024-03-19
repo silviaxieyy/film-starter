@@ -52,6 +52,7 @@
 }
 
 .FilmLibrary .film-list-filter {
+  width: 8.3333325%;
   flex-grow: 1;
   background-color: #bbb;
   color: white;
