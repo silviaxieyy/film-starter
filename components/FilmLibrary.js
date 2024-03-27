@@ -8,10 +8,12 @@ import TMDB, { TMDB_API_KEY } from "./TMDB";
 
 function FilmLibrary() {
   const [TMDBData, setTMDBData] = useState([]);
+  const [currentTMDBData, setcurrentTMDBData] = useState([])
   const [page, setPage] = useState(1);
   const [year, setYear] = useState(2022);
   const [readMoreFilm, setReadMoreFilm] = useState({});
   const [faveFilms, setFaveFilms] = useState([]);
+  const [faveListOpen, setFaveListOpen] = useState(false)
 
 
   useEffect(() => {
@@ -26,7 +28,8 @@ function FilmLibrary() {
       const DATA = await response.json();
       
       if (DATA.results.length >0) {
-        setTMDBData(prev => [...prev, ...DATA.results])
+        setTMDBData(prev => [...prev, ...DATA.results]);
+        setcurrentTMDBData(prev => [...prev, ...DATA.results]);
       }
       
       console.log(DATA.results);
@@ -37,8 +40,24 @@ function FilmLibrary() {
     }
   }; 
   
-  const handleReadMoreDetail = (index) => {
-    setReadMoreFilm(TMDBData[index]);
+  const fetchFilmById = async (id) => {
+    const url = `https://api.themoviedb.org/3/movie/${id}?language=en-US&api_key=${TMDB_API_KEY}`
+
+    try {
+      const response = await fetch(url);
+      const filmData = await response.json();
+      return filmData;
+    } catch (error) {
+      console.log("failed to fetch film data: ", error);
+      return null;
+    }
+  }
+
+  const handleReadMoreDetail = async (index) => {
+    const id = TMDBData[index].id;
+    const filmData = await fetchFilmById(id);
+    setReadMoreFilm(filmData);
+    console.log(filmData);
   }
   
   const handleAddToQueue = (film) => {
@@ -57,23 +76,38 @@ function FilmLibrary() {
     const inputYear = e.target.value;
     if (inputYear >= 1920) {
       setTMDBData([]);
-      setFaveFilms([]);
       setYear(inputYear);
       setPage(1);
     }
   }
+
+  const handleFaveClick = () => {
+    setFaveListOpen(true);
+  }
+
   
+  const handleAllClick = () => {
+    setFaveListOpen(false);
+    setcurrentTMDBData([...currentTMDBData]);
+
+  }
 
   return (
     <div className="FilmLibrary">
       <div className="film-list">
         <h1 className="section-title">FILMS</h1>
         <div className="film-list-filters">
-          <button className="film-list-filter is-active">
+          <button 
+            className="film-list-filter is-active"
+            onClick={handleAllClick}
+          >
             ALL
             <span className="section-count">{TMDBData.length}</span>
           </button>
-          <button className={`film-list-filter ${faveFilms.length !== 0 ? 'is-active' : ''}`}>
+          <button 
+            className={`film-list-filter ${faveFilms.length !== 0 ? 'is-active' : ''}`}
+            onClick={handleFaveClick}
+          >
             FAVES
             <span className="section-count">{faveFilms.length}</span>
           </button>
@@ -89,27 +123,44 @@ function FilmLibrary() {
 
         </div>
         
-       {TMDBData?.map((film, index) => {
-         const releaseDate = new Date(film.release_date);
+       {faveListOpen 
+         ? faveFilms.map((film, index) => {
+            const releaseDate = new Date(film.release_date);
+  
+            return (
+              <FilmRow 
+                key={index} 
+                src={film.poster_path} 
+                title={film.title} 
+                year={releaseDate.getFullYear()} 
+                handleReadMoreDetail={()=> handleReadMoreDetail(index)}
+                handleAddToQueue={() => handleAddToQueue(film)}
+                isFave={faveFilms.includes(film)}
+              />
+            )
+          }) 
+          : TMDBData?.map((film, index) => {
+              const releaseDate = new Date(film.release_date);
 
-         return (
-           <FilmRow 
-             key={index} 
-             src={film.poster_path} 
-             title={film.title} 
-             year={releaseDate.getFullYear()} 
-             handleReadMoreDetail={()=> handleReadMoreDetail(index)}
-             handleAddToQueue={() => handleAddToQueue(film)}
-             isFave={faveFilms.includes(film)}
-          />)
-       })} 
+              return (
+                <FilmRow 
+                  key={index} 
+                  src={film.poster_path} 
+                  title={film.title} 
+                  year={releaseDate.getFullYear()} 
+                  handleReadMoreDetail={()=> handleReadMoreDetail(index)}
+                  handleAddToQueue={() => handleAddToQueue(film)}
+                  isFave={faveFilms.includes(film)}
+                />)
+            })
+        } 
       
-      <button 
+      {!faveListOpen && <button 
         className="my-25 px-6"
         onClick={handleLoadMore}
       >
         Load More
-      </button>
+      </button>}
       </div>
 
       <div className="film-details">
@@ -121,6 +172,7 @@ function FilmLibrary() {
               backdrop_path={readMoreFilm.backdrop_path}
               poster_path={readMoreFilm.poster_path}
               overview={readMoreFilm.overview}
+              tagline={readMoreFilm.tagline}
             />
           }
       </div>

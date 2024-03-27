@@ -9,9 +9,12 @@ export default function FilmDetail(props) {
         <h1 className="film-title">{props.title}</h1>
       </figure>
 
-      <div className="film-meta">
+      <div className="film-meta">        
         <p className="film-detail-overview">
           <img src={`https://image.tmdb.org/t/p/w780${props.poster_path}`} className="film-detail-poster" alt={props.title} />
+          <strong>{props.tagline}</strong> 
+          <br />
+          <br />
           {props.overview}
         </p>
       </div>
