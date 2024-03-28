@@ -1,17 +1,17 @@
 import { useEffect, useState } from "react"
+import { useRouter } from "next/router";
 import FilmDetail from "./FilmDetail";
 import FilmDetailEmpty from "./FilmDetailEmpty";
 import './FilmLibrary.css';
 import FilmRow from "./FilmRow";
 import './FilmRow.css'
-import TMDB, { TMDB_API_KEY } from "./TMDB";
+import { TMDB_API_KEY } from "./TMDB";
 
 function FilmLibrary() {
   const [TMDBData, setTMDBData] = useState([]);
   const [currentTMDBData, setcurrentTMDBData] = useState([])
   const [page, setPage] = useState(1);
   const [year, setYear] = useState(2022);
-  const [readMoreFilm, setReadMoreFilm] = useState({});
   const [faveFilms, setFaveFilms] = useState([]);
   const [faveListOpen, setFaveListOpen] = useState(false)
 
@@ -39,26 +39,6 @@ function FilmLibrary() {
       console.log("failed to fetch film data: ", error)
     }
   }; 
-  
-  const fetchFilmById = async (id) => {
-    const url = `https://api.themoviedb.org/3/movie/${id}?language=en-US&api_key=${TMDB_API_KEY}`
-
-    try {
-      const response = await fetch(url);
-      const filmData = await response.json();
-      return filmData;
-    } catch (error) {
-      console.log("failed to fetch film data: ", error);
-      return null;
-    }
-  }
-
-  const handleReadMoreDetail = async (index) => {
-    const id = TMDBData[index].id;
-    const filmData = await fetchFilmById(id);
-    setReadMoreFilm(filmData);
-    console.log(filmData);
-  }
   
   const handleAddToQueue = (film) => {
     if (!faveFilms.includes(film)) {
@@ -136,6 +116,7 @@ function FilmLibrary() {
                 handleReadMoreDetail={()=> handleReadMoreDetail(index)}
                 handleAddToQueue={() => handleAddToQueue(film)}
                 isFave={faveFilms.includes(film)}
+                id={film.id}
               />
             )
           }) 
@@ -151,6 +132,7 @@ function FilmLibrary() {
                   handleReadMoreDetail={()=> handleReadMoreDetail(index)}
                   handleAddToQueue={() => handleAddToQueue(film)}
                   isFave={faveFilms.includes(film)}
+                  id={film.id}
                 />)
             })
         } 
@@ -165,16 +147,8 @@ function FilmLibrary() {
 
       <div className="film-details">
         <h1 className="section-title">DETAILS</h1>
-        {readMoreFilm === null ?
-          <FilmDetailEmpty /> :
-            <FilmDetail 
-              title={readMoreFilm.title} 
-              backdrop_path={readMoreFilm.backdrop_path}
-              poster_path={readMoreFilm.poster_path}
-              overview={readMoreFilm.overview}
-              tagline={readMoreFilm.tagline}
-            />
-          }
+          {/* <FilmDetail id={TMDBData[0].id} /> */}
+          
       </div>
     </div>
   )

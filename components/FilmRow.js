@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import  "./FilmRow.css";
+import Link from "next/link";
 
 export default function FilmRow(props) {
 
@@ -12,11 +13,17 @@ export default function FilmRow(props) {
           <p>{props.year}</p>
           <div className="actions">
             <button className="action" onClick={props.handleAddToQueue}>
-            {props.isFave ? <span className="material-icons">remove_to_queue</span> : <span className="material-icons">add_to_queue</span>}
+              {props.isFave ? <span className="material-icons">remove_to_queue</span> : <span className="material-icons">add_to_queue</span>}
             </button>
-            <button className="action" onClick={props.handleReadMoreDetail}>
+
+            <Link href={`/films/${props.id}`} className="action" passHref>
               <span className="material-icons">read_more</span>
-            </button>
+            </Link>
+
+            {/* <button className="action" onClick={props.handleReadMoreDetail}>
+              <span className="material-icons">read_more</span>
+            </button> */}
+
           </div>                       
         </div>
       </div>
