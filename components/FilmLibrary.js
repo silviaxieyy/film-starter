@@ -14,7 +14,8 @@ function FilmLibrary() {
   const [year, setYear] = useState(2022);
   const [faveFilms, setFaveFilms] = useState([]);
   const [faveListOpen, setFaveListOpen] = useState(false)
-
+  const [selectedFilmId, setSelectedFilmId] = useState(null)
+  
 
   useEffect(() => {
     fetchData();
@@ -27,14 +28,14 @@ function FilmLibrary() {
       const response = await fetch(url);
       const DATA = await response.json();
       
-      if (DATA.results.length >0) {
+      if (DATA.results && DATA.results.length >0) {
         setTMDBData(prev => [...prev, ...DATA.results]);
         setcurrentTMDBData(prev => [...prev, ...DATA.results]);
       }
       
-      console.log(DATA.results);
-      console.log(DATA.results[0].poster_path);
-      console.log(DATA.results[0].backdrop_path);
+/*       console.log(DATA.results);
+      console.log(DATA.results[0]?.poster_path);
+      console.log(DATA.results[0]?.backdrop_path); */
     } catch (error) {
       console.log("failed to fetch film data: ", error)
     }
@@ -69,7 +70,10 @@ function FilmLibrary() {
   const handleAllClick = () => {
     setFaveListOpen(false);
     setcurrentTMDBData([...currentTMDBData]);
+  }
 
+  const handleFilmClick = (id) => {
+    setSelectedFilmId(id)
   }
 
   return (
@@ -98,9 +102,7 @@ function FilmLibrary() {
               className="film-list-filter is-active" 
               placeholder="year"     
               onChange={handleYearChange}
-            />
-          
-
+            />       
         </div>
         
        {faveListOpen 
@@ -115,6 +117,7 @@ function FilmLibrary() {
                 year={releaseDate.getFullYear()} 
                 handleReadMoreDetail={()=> handleReadMoreDetail(index)}
                 handleAddToQueue={() => handleAddToQueue(film)}
+                handleFilmClick={handleFilmClick}
                 isFave={faveFilms.includes(film)}
                 id={film.id}
               />
@@ -131,6 +134,7 @@ function FilmLibrary() {
                   year={releaseDate.getFullYear()} 
                   handleReadMoreDetail={()=> handleReadMoreDetail(index)}
                   handleAddToQueue={() => handleAddToQueue(film)}
+                  handleFilmClick={handleFilmClick}
                   isFave={faveFilms.includes(film)}
                   id={film.id}
                 />)
@@ -147,8 +151,7 @@ function FilmLibrary() {
 
       <div className="film-details">
         <h1 className="section-title">DETAILS</h1>
-          {/* <FilmDetail id={TMDBData[0].id} /> */}
-          
+          {selectedFilmId ? <FilmDetail id={selectedFilmId} /> : <FilmDetailEmpty />}    
       </div>
     </div>
   )
