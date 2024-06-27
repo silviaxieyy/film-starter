@@ -1,4 +1,4 @@
-import FilmPeak from '../components/filmPeak'
+import FilmPeak from '../components/FilmPeak'
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { TMDB_API_KEY } from '../components/TMDB';

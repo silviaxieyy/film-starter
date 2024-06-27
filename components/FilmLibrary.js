@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react"
-import { useRouter } from "next/router";
 import FilmDetail from "./FilmDetail";
 import FilmDetailEmpty from "./FilmDetailEmpty";
 import './FilmLibrary.css';
