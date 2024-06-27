@@ -14,7 +14,7 @@ export default function FilmPeak({film}) {
         />
         <div className="FilmDetail">
           <h3>{film.title}</h3>
-          <p>{film.year}</p>
+          <p>{film.release_date}</p>
         </div>
            
       </div>
