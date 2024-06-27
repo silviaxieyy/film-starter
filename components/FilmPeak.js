@@ -12,10 +12,9 @@ export default function FilmPeak({film}) {
           src={`https://image.tmdb.org/t/p/w780${film.poster_path}`} 
           alt={`${film.title} film poster`} 
         />
-        <div className="FilmDetail">
           <h3>{film.title}</h3>
           <p>{film.release_date}</p>
-        </div>
+
            
       </div>
     </>

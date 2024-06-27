@@ -17,10 +17,3 @@
   word-wrap: break-word;
   max-width: 160px;
 }
-
-.FilmDetail {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin: 5px;
-}
