@@ -7,7 +7,10 @@ export default function FilmRow(props) {
   return(
     <>
       <div className="FilmRow">
-        <img src={`https://image.tmdb.org/t/p/w780${props.src}`} alt={`${props.title} film poster`} />
+        <img 
+          src={`https://image.tmdb.org/t/p/w780${props.src}`} alt={`${props.title} film poster`} 
+          onClick={() => props.handleFilmClick(props.id)}
+        />
         <div className="film-summary">
           <h3>{props.title}</h3>
           <p>{props.year}</p>
